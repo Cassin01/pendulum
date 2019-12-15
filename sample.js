@@ -1,6 +1,4 @@
 'use strict';
-// 厳密解の参考
-// https://www.sit.ac.jp/user/konishi/JPN/L_Support/SupportPDF/SimplePendulum.pdf
 
 // 支点(frictionless pivot)
 const frictionless_pivot_x = 200;
