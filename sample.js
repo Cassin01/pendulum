@@ -1,21 +1,21 @@
 'use strict';
-// 厳密解の参考
-// https://www.sit.ac.jp/user/konishi/JPN/L_Support/SupportPDF/SimplePendulum.pdf
 
 // 支点(frictionless pivot)
 const frictionless_pivot_x = 200;
 const frictionless_pivot_y = 50;
 
-const dt = 0.5;
+const dt = 0.1;
 const g = 9.8;
 const deg2rad = (deg) => deg * (Math.PI / 180);
 const rad_0 = deg2rad(20);
 
 const start = () => {
 
-    let t = 0;
     let rad = rad_0;
     let rad_v = 0;
+
+    let rad_theta = rad_0;
+    let rad_v_theta = 0;
 
     // 描画
     let canvas = document.getElementById('canvas_e');
@@ -27,8 +27,6 @@ const start = () => {
     ctx.lineWidth = 3;
 
     const draw = () => {
-        t += dt;
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // 重心(massive bob)
@@ -40,9 +38,9 @@ const start = () => {
             ctx.stroke();
         };
 
-        // 数値計算解
+        // sinθ で計算
         // 角度の更新
-        rad_v += (-g * rad / len) * dt;
+        rad_v += (-g * Math.sin(rad) / len) * dt;
         rad += rad_v * dt;
 
         draw_line(
@@ -50,11 +48,12 @@ const start = () => {
             frictionless_pivot_y + len * Math.cos(rad),
             "#3F7A63");
 
-        //  厳密解
-        const exact_rad = rad_0 * Math.cos(Math.sqrt(g / len) * t) ;
+        //  θ で計算
+        rad_v_theta += (-g * rad_theta / len) * dt;
+        rad_theta += rad_v_theta * dt;
         draw_line(
-            frictionless_pivot_x + len * Math.sin(exact_rad),
-            frictionless_pivot_y + len * Math.cos(exact_rad),
+            frictionless_pivot_x + len * Math.sin(rad_theta),
+            frictionless_pivot_y + len * Math.cos(rad_theta),
             "#FFFFFF");
     };
 
